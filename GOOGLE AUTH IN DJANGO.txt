@@ -1,0 +1,114 @@
+settings.py
+
+STEP-1:
+----------------------------------------------------------------------
+
+install allauth apps in installed app
+
+INSTALLED_APPS = [
+    
+    'app1',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google',
+]
+
+STEP-2:
+-------------------------------------------------------------------------
+
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        
+        'APP': {
+            'client_id': 'use google cloud clint id',
+            'secret': 'use google cloud secret key',
+            'key': ''
+        }
+    }
+}
+
+STEP-3:
+-----------------------------------------------------------------------------
+
+IT IS USED FOR DIRECT LOGIN TO GOOGLE
+
+SOCIALACCOUNT_LOGIN_ON_GET=True # This will login the user as soon as they are authenticated by the provider.
+
+
+STEP-4:
+-----------------------------------------------------------------------------------
+
+MIDDLEWARE = [
+   
+    'allauth.account.middleware.AccountMiddleware', # ADD ALLAUTH MIDDLEWARE
+]
+
+
+STEP-5:
+--------------------------------------------------------------------------------------
+
+ADD THIS TO SETTING.PY
+
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
+]
+
+
+STEP-6:
+----------------------------------------------------------------------------------------
+
+LOGIN_URL='home'
+LOGIN_REDIRECT_URL='dashboard'
+LOGOUT_REDIRECT_URL='home'
+
+_
+
+
+
+
+
+
+_____________________________________________________________________________________
+URLS.PY
+______________________________________________________________________________________
+
+from django.contrib import admin
+from django.urls import path,include
+from django.contrib.auth.urls import views as auth_views
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('accounts/', include('allauth.urls')), # ADD ALLAUTH.URLS IN URLS.PY
+    path('',include('app1.urls')),
+    path('accounts/', include('django.contrib.auth.urls')),
+
+]
+
+
+
+
+
+
+----------------------------------------------------------------------------------------------
+HTML FILE
+---------------------------------------------------------------------------------------------
+
+
+{% load socialaccount %}
+<h2>Google login</h2>
+<a href="{% provider_login_url 'google' %}">LogIn with Google</a>
+
+
+
+
+
+
+
+
+
+
+
+
+

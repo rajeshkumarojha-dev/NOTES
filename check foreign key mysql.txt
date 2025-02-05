@@ -1,0 +1,1 @@
+select constraint_name, column_name, referenced_table_name from information_schema.key_column_usage where table_name = "depart";
