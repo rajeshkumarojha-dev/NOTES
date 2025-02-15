@@ -1,0 +1,111 @@
+
+STEP 1
+--------------------------------------------
+
+pip install whitenoise
+
+___________________________________________________________________________
+ADD BUILD.SH FILE
+-----------------------------------------------------------------------------
+#!/bin/bash
+#!/bin/sh
+
+set -o errexit
+
+pip install -r requirements.txt
+
+python manage.py collectstatic --no-input
+
+python manage.py migrate
+
+-------------------------------------------------------------------------
+THEN RUN pip freeze > requirements.txt
+______________________________________________________________________________
+
+STEP 2
+--------------------------------------------
+ADD MIDDLEWARE IN SETTINGS.PY
+
+1) DEBUG = False
+
+2) ALLOWED_HOSTS = ['*']
+
+3) MIDDLEWARE = [
+    # ...
+    "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
+    # ...
+]
+
+
+4) STORAGES = {
+    # ...
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+    },
+}
+
+
+
+5) STATIC_ROOT = BASE_DIR / "staticfiles"
+
+
+
+6) CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",
+    "https://todo-frontend-j1f0.onrender.com"  #ADD FRONTEND URL
+]
+
+
+
+STEP 3
+----------------------------------------------------------------
+
+
+CONFIGURE DATABASE WITH RENDER POSTGURSQL (USERNAME, PASSWORD, HOST, PORT, DATABASE_NAME)
+ URL:-  https://dashboard.render.com/new/database
+
+
+STEP 4
+---------------------------------------------------------------------
+
+THEN deploy in webservises in render
+
+STEP 5
+---------------------------------------------------------------------
+
+COME TO FRONTEND
+STEP 1
+___________________________________________________________________
+RUN THE COMMAND IN FRONTEND TERMINAL
+
+npm run build
+
+
+STEP 2
+______________________________________________________________________
+
+change url "http://localhost" to backend deploy url "https://todo-backend-c2az.onrender.com"
+
+step 3
+______________________________________________________________________
+
+
+if its give any error react 19
+
+then run this command : npm install react@18 react-dom@18
+
+
+STEP 4
+____________________________________________________________________
+
+
+PUSH TO GITHUB
+
+AND GOTO RENDER WEBSITE GOTO "STATIC SITES"
+
+THEN CHOOSE REPO AND DEPLOY IT
+
+
+
+
